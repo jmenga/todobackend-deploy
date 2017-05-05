@@ -88,7 +88,11 @@
     state: update
     name: "{{ cf_stack.stack_outputs.TodobackendService }}"
     cluster: "{{ cf_stack.stack_outputs.EcsCluster }}"
-    task_definition: "{{ todobackend_task_def_arn }}" 
+    task_definition: "{{ todobackend_task_def_arn }}"
+    desired_count: "{{ instance_count | default(1) }}"
+    deployment_config: 
+      minimumHealthyPercent: 50
+      maximumPercent: 200
   register: update_ecs_service
   when: image_tag is defined
 - debug: msg={{ update_ecs_service }}
